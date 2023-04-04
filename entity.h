@@ -9,16 +9,14 @@ class Entity {
 public:
     Entity();
     Entity(string t);
-    Entity(string t, Chromosome g);
-    Chromosome genes;
 
     int last_action;  //what time step was their last action taken on?
+    int pop_index;    //store their index into the array of chromosomes for their species
     string type;
     int spec;
 
-    //string view;   //4 bits, up to 4 plants in view (spots 1,3,5,7)
-    bitset<STATE_SIZE> state;  //should look different for different genetic entities
-                   //for eater: 2 bits total
+    bitset<STATE_SIZE> state;
+    bitset<2> facing;   //encodes facing dir 00 = up, 01 = right, 10 = down, 11 = left
 };
 
 

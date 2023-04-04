@@ -1,11 +1,14 @@
 #Genetic Algo Makefile TFL
-TARGET = gen
-OBJS = gen.o chromosome.o entity.o
+TARGET = main
+OBJS = main.o entity.o gen_alg_game.o bitset_genetics.o
 CFLAGS = -Wall -I.
-LIBS =
+
+
 
 $(TARGET): $(OBJS)
-	g++ -o $(TARGET) $(CFLAGS) -g $(OBJS) $(LIBS)
+	g++  $(CFLAGS) $(OBJS) -o $(TARGET)
+
+gen_alg_game.o: gen_alg.h
 
 clean:
 	rm -f $(OBJS) $(TARGET)

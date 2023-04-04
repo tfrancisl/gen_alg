@@ -6,24 +6,23 @@
 #define GENE_LENGTH               	(2+STATE_SIZE)
 #define CHROMO_LENGTH				(GENE_COUNT)*(GENE_LENGTH)
 
-#define CROSSOVER_RATE            	0.8
+#define CROSSOVER_RATE            	0.7
 #define MUTATION_RATE             	0.001
+#define DELETION_RATE               0.001
+#define MAX_DELETION_LENGTH         3*GENE_LENGTH
 #define EATER_POP_SIZE              50              //Must be even (roulette rules)
-#define PLANT_POP_SIZE              250
+#define PLANT_POP_SIZE              270
 
 #define WORLD_SIZE 					40
-#define DAYS_PER_GENERATION 		200
-#define GENERATIONS					2500
+#define DAYS_PER_GENERATION 		250
+#define GENERATIONS					10000
 
-namespace std {
-template<std::size_t N>
-bool operator<(const std::bitset<N>& x, const std::bitset<N>& y)
-{
-    for (int i = N-1; i >= 0; i--) {
-        if (x[i] ^ y[i]) return y[i];
-    }
-    return false;
-}
-}
+#define MAKE_CSV 1
+
+//returns a float between 0 & 1
+#define RANDOM_NUM			((float)rand()/((float)(RAND_MAX)+1))
+
+//returns a random integer between 0 and N-1
+#define RANDOM_NUM_RANGE(N)	rand() % (int)N
 
 #endif //GEN_ALG_
