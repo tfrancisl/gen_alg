@@ -9,13 +9,17 @@ vector<string> WorldToStrings(array<array<Entity, WORLD_SIZE>, WORLD_SIZE> w);
 
 int main(void) {
 
+	//set seed
+	//srand(2001);
+	
+	//time based seed (randomish)
 	srand((int)time(NULL));
 
     GenAlgGame *game1 = new GenAlgGame(EATER_POP_SIZE, PLANT_POP_SIZE);
 
 
     #if MAKE_CSV
-	std::cout << "generation,max_fitness,avg_fitness,avg_fitness_10" << std::endl;
+	std::cout << "generation,max_fitness,avg_fitness,max_fitness_apex,avg_fitness_apex" << std::endl;
 	#endif
     
     for(int g=0; g<GENERATIONS; g++) {
