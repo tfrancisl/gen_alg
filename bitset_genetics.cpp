@@ -4,10 +4,13 @@
 using std::bitset;
 using std::vector;
 
+
+//optimization idea: there should be a way to generate a random number such that the 0.1% mutation rate applies in the case of bitwise or (or some other operator) against the genome
+
 template<int gene_len, int gene_count>
-void Mutate(bitset<gene_len*gene_count> &bits) {
+void Mutate(bitset<gene_len*gene_count> &bits, float mutation_rate) {
 	for (int i=0; i<(gene_len*gene_count); i++) {
-		if (RANDOM_NUM < MUTATION_RATE) {
+		if (RANDOM_NUM < mutation_rate) {
 			bits[i].flip();
 		}
 	}
@@ -16,12 +19,12 @@ void Mutate(bitset<gene_len*gene_count> &bits) {
 }
 
 template<int gene_len, int gene_count>
-void Crossover(bitset<gene_len*gene_count> &offspring1, bitset<gene_len*gene_count> &offspring2) {
+void Crossover(bitset<gene_len*gene_count> &offspring1, bitset<gene_len*gene_count> &offspring2, float crossover_rate) {
   bitset<gene_len*gene_count> t1,t2;
   int crossover;
 
   //dependent on the crossover rate
-  if (RANDOM_NUM < CROSSOVER_RATE)
+  if (RANDOM_NUM < crossover_rate)
   {
     //create a random crossover point
     crossover = (int)(RANDOM_NUM*(gene_len*gene_count));
@@ -40,10 +43,10 @@ void Crossover(bitset<gene_len*gene_count> &offspring1, bitset<gene_len*gene_cou
 }
 
 template<int gene_len, int gene_count>
-void Deletion(bitset<gene_len*gene_count> &bits) {
+void Deletion(bitset<gene_len*gene_count> &bits, float deletion_rate) {
 	int del_pt,del_len;
 
-	if (RANDOM_NUM < DELETION_RATE) {
+	if (RANDOM_NUM < deletion_rate) {
 		del_pt = (int)(RANDOM_NUM*(gene_len*gene_count));
 		del_len = RANDOM_NUM_RANGE(MAX_DELETION_LENGTH) + 1;
 
