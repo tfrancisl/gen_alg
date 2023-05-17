@@ -1,9 +1,10 @@
-#include "gen_alg.h"
 #include "gen_alg_game.h"
 #include <vector>
 #include "time.h"
 #include <chrono>
 using std::vector;
+using std::array;
+using std::string;
 
 #define NUM_TESTS 4
 

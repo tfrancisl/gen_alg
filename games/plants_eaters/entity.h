@@ -1,8 +1,13 @@
 #ifndef ENTITY_H_
 #define ENTITY_H_
+#include <string>
+#include <bitset>
 
-#include "chromosome.h"
+//#include "gen_alg_game.h"
+
+#define STATE_SIZE 4
 using std::string;
+using std::bitset;
 
 class Entity {
 

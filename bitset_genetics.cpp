@@ -1,8 +1,14 @@
 #include <bitset>
-#include "entity.h"
+#include "chromosome.h"
 #include <vector>
 using std::bitset;
 using std::vector;
+
+//returns a float between 0 & 1
+#define RANDOM_NUM			((float)rand()/((float)(RAND_MAX)+1))
+
+//returns a random integer between 0 and N-1
+#define RANDOM_NUM_RANGE(N)	rand() % (int)(N)
 
 
 //optimization idea: there should be a way to generate a random number such that the 0.1% mutation rate applies in the case of bitwise or (or some other operator) against the genome
@@ -42,7 +48,7 @@ void Crossover(bitset<gene_len*gene_count> &offspring1, bitset<gene_len*gene_cou
   }
 }
 
-template<int gene_len, int gene_count>
+/*template<int gene_len, int gene_count>
 void Deletion(bitset<gene_len*gene_count> &bits, float deletion_rate) {
 	int del_pt,del_len;
 
@@ -57,7 +63,7 @@ void Deletion(bitset<gene_len*gene_count> &bits, float deletion_rate) {
 		}
 	}
 
-}
+}*/
 
 
 template<int gene_len, int gene_count>

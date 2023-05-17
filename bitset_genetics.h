@@ -1,6 +1,5 @@
 #ifndef BITSET_GENETICS_
 #define BITSET_GENETICS_
-#include "gen_alg.h"
 #include "bitset_genetics.cpp"
 
 template<int gene_len, int gene_count>

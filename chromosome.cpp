@@ -1,11 +1,12 @@
-#include "chromosome.h"
+#ifndef CHROMOSOME_CPP_
+#define CHROMOSOME_CPP_
+
+//#include "chromosome.h"
 #include <iostream>
 #include <vector>
 #include <bitset>
 using std::string;
 using std::vector;
-
-
 
 template<int gene_len, int gene_count>
 Chromosome<gene_len, gene_count>::Chromosome(){
@@ -40,3 +41,5 @@ void Chromosome<gene_len, gene_count>::BitsToRules() {
         rules[key] = val; 
     }
 }
+
+#endif

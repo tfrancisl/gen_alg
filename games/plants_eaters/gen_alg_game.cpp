@@ -1,5 +1,6 @@
 #include "gen_alg_game.h"
-#include "bitset_genetics.h"
+#include "../../bitset_genetics.h"
+#include "../../chromosome.h"
 #include <vector>
 #include <chrono>
 

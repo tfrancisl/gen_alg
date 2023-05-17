@@ -1,14 +1,14 @@
-#Genetic Algo Makefile TFL
-TARGET = main
-OBJS = main.o entity.o gen_alg_game.o bitset_genetics.o
-CFLAGS = -Wall -I.
+OBJS = bitset_genetics.o chromosome.o
+TARGETS = plants_eaters tic_tac_toe
 
+all: plants_eaters $(OBJS)
 
+plants_eaters: $(OBJS)
+	$(MAKE) -C games/plants_eaters
 
-$(TARGET): $(OBJS)
-	g++  $(CFLAGS) $(OBJS) -o $(TARGET)
-
-gen_alg_game.o: gen_alg.h
+tic_tac_toe: $(OBJS)
+	$(MAKE) -C games/tic_tac_toe
 
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -rf $(OBJS) $(TARGETS)
+
