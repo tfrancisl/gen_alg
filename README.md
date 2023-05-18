@@ -1,2 +1,4 @@
-# gen_alg_ece478
-Genetic Algorithms work for ECE 478 - Industrial Computer Control. UMaine Spring 2023.
+# gen_alg
+Continuation of my final project work from ECE 478 - Industrial computer control.
+Several genetic algorithm "games" can be found in the games folder.
+Invoke make in the top level to build each of the games.
