@@ -5,13 +5,17 @@
 #include <iostream>
 #include <math.h>
 #include <bitset>
+#include <iostream>
+#include <vector>
+#include <bitset>
 
+using std::string;
+using std::vector;
 using std::bitset;
-using std::map;
 using std::array;
 
 
-/*template<int gene_len, int gene_count>
+template<int gene_len, int gene_count>
 class Chromosome {
 
 public:
@@ -26,10 +30,7 @@ public:
     void PrintChromosome();
     void BitsToRules();
 
-};*/
-
-template<int gene_len, int gene_count>
-class Chromosome;
+};
 
 #include "chromosome.cpp"
 

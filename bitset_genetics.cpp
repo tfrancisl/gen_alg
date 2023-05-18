@@ -1,6 +1,6 @@
 #include <bitset>
-#include "chromosome.h"
 #include <vector>
+#include "chromosome.h"
 using std::bitset;
 using std::vector;
 

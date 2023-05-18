@@ -1,12 +1,9 @@
 #ifndef CHROMOSOME_CPP_
 #define CHROMOSOME_CPP_
 
-//#include "chromosome.h"
-#include <iostream>
-#include <vector>
-#include <bitset>
-using std::string;
-using std::vector;
+#include "chromosome.h"
+
+
 
 template<int gene_len, int gene_count>
 Chromosome<gene_len, gene_count>::Chromosome(){

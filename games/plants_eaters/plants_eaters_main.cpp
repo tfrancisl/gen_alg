@@ -21,10 +21,10 @@ vector<string> WorldToStrings(array<array<Entity, WORLD_SIZE>, WORLD_SIZE> w);
 
 int main(int argc, char *argv[]) {
 	array<int, NUM_TESTS> eater_pop_sizes     = {30,    30,    30,    30};
-	array<int, NUM_TESTS> plant_pop_sizes     = {50,    50,    50,    50};
+	array<int, NUM_TESTS> plant_pop_sizes     = {0,     10,    100,   250};
 	array<int, NUM_TESTS> apex_pop_sizes      = {16,    16,    16,    16};
-	array<int, NUM_TESTS> gens 				  = {2500,  2500,  2500,  2500};
-	array<int, NUM_TESTS> days	 			  = {365,   365,   365,   365};
+	array<int, NUM_TESTS> gens 				  = {2000,  2000,  2000,  2000};
+	array<int, NUM_TESTS> days	 			  = {400,   400,   400,   400};
 	array<float, NUM_TESTS> crossover_rates   = {0.75,  0.75,  0.75,  0.75};
 	array<float, NUM_TESTS> mutation_rates    = {0.001, 0.001, 0.001, 0.001};
 	

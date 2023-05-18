@@ -1,9 +1,11 @@
-OBJS = bitset_genetics.o chromosome.o
+OBJS = bitset_genetics.o
 TARGETS = plants_eaters tic_tac_toe
 
 all: plants_eaters $(OBJS)
 
 plants_eaters: $(OBJS)
+	cp $(OBJS) games/plants_eaters/
+	cp chromosome.* games/plants_eaters/
 	$(MAKE) -C games/plants_eaters
 
 tic_tac_toe: $(OBJS)
@@ -11,4 +13,5 @@ tic_tac_toe: $(OBJS)
 
 clean:
 	rm -rf $(OBJS) $(TARGETS)
+	$(MAKE) clean -C games/plants_eaters
 
