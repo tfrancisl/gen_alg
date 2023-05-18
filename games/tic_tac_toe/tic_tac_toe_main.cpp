@@ -4,20 +4,20 @@
 
 
 int main(void) {
-    int games = 10;
+    int gens = 1000;
+    int games = 250;
 
     srand((int)time(NULL));
 
-    TicTacToe *ttt = new TicTacToe(1);
+    TicTacToe *ttt = new TicTacToe(10);
 
+    ttt->SetGeneticParams(0.7,0.001);
 
-    for (int i=0; i<games; i++) {
-    std::cout << "Game " << i << "\n";
-        ttt->PlayGame();
+    for (int i=0; i<gens; i++) {
+        ttt->Generation(games);
+
+        //ttt->PrintPopStats();
     }
-    std::cout << "*****\n";
-
-    ttt->PrintPopStats();
 
     return 0;
 }

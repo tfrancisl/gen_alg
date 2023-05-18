@@ -4,6 +4,7 @@
 #include <bitset>
 #include <vector>
 #include <array>
+#include "chromosome.h"
 
 using std::vector;
 using std::bitset;
@@ -26,11 +27,13 @@ class TicTacToe {
 public:
     TicTacToe();
     TicTacToe(int pop_size);
-    ~TicTacToe();
 
     int pop_size;
+    float crossover_rate, mutation_rate;
 
     vector<Individual> population;
+
+    void Generation(int games);
 
     // each individual plays out their current game
     void PlayGame();
@@ -39,18 +42,20 @@ public:
     
     // give a fitness val to each individual based on win/loss/ties
     void EvaluateFitness();
+
+    void SetGeneticParams(float crossover_rate, float mutation_rate);
 };
 
 class Individual { 
 
 public:
     Individual();
-    //~Individual();
+    Individual(Chromosome<GENE_LENGTH, GENE_COUNT> genes);
 
-    bitset<CHROMO_LENGTH> genes;
+    //bitset<CHROMO_LENGTH> genes;
+    Chromosome<GENE_LENGTH, GENE_COUNT> genes;
     int wins, losses, ties;
     bool first;         // goes first or second?
-    float fitness;
 
     // 0 = None, -1 = X, 1 = O  ->  could be different type
     array<int, 9> current_game;
