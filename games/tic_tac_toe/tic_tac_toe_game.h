@@ -10,10 +10,16 @@ using std::bitset;
 using std::array;
 
 #define GENE_LENGTH     4       // 4 bits to encode which of the 9 grids we'll play in
-#define GENE_COUNT      2<<9    // 3 states (N, X, O) for 9 grid squares
+#define GENE_COUNT      (1<<(18))    // 2 bits to represent 3 states, for each of the 9 grids
 #define CHROMO_LENGTH   GENE_COUNT*GENE_LENGTH
 
-//class Individual;
+//returns a float between 0 & 1
+#define RANDOM_NUM			((float)rand()/((float)(RAND_MAX)+1))
+
+//returns a random integer between 0 and N-1
+#define RANDOM_NUM_RANGE(N)	rand() % (int)(N)
+
+class Individual;
 
 class TicTacToe {
 
@@ -29,8 +35,7 @@ public:
     // each individual plays out their current game
     void PlayGame();
 
-    // random player makes a move on the given game
-    //void RandomPlayer(array<int, 9> &game);
+    void PrintPopStats();
     
     // give a fitness val to each individual based on win/loss/ties
     void EvaluateFitness();
@@ -40,7 +45,7 @@ class Individual {
 
 public:
     Individual();
-    ~Individual();
+    //~Individual();
 
     bitset<CHROMO_LENGTH> genes;
     int wins, losses, ties;
@@ -57,6 +62,8 @@ public:
     void RandomPlayer();
 
     int EvaluateBoard();
+
+    void ClearBoard();
 
 };
 

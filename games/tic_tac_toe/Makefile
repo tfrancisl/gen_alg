@@ -1,5 +1,5 @@
 TARGET = tic_tac_toe_main
-OBJS = tic_tac_toe_main.o entity.o tic_tac_toe_game.o bitset_genetics.o
+OBJS = tic_tac_toe_main.o tic_tac_toe_game.o bitset_genetics.o
 CFLAGS = -Wall -I.
 
 
