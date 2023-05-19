@@ -73,12 +73,12 @@ void TicTacToe::GenerationPairs() {
 
     for (int i=0; i<this->games; i++) {
         this->PlayGamePairs();
-        std::rotate(this->second_population.begin(), this->second_population.begin()+1, this->second_population.end());
+        std::swap(this->first_population, this->second_population);
+        if (i%2==0) std::rotate(this->second_population.begin(), this->second_population.begin()+2, this->second_population.end());
     }
 
     this->EvaluateFitness(this->first_population);
     this->EvaluateFitness(this->second_population);
-    //this->PrintPopStats();
 
     for (int i=0; i<this->pop_size/2; i++) {
         tmp_pop.push_back(Chromosome<GENE_LENGTH,GENE_COUNT>(this->first_population[i].genes));
@@ -205,7 +205,7 @@ void TicTacToe::EvaluateFitness(vector<Individual> &population) {
     //int total_wins = 0;
 
     for (int i=0; i<population.size(); i++) {
-        population[i].genes.fitness = ((float)population[i].wins) + ((float)population[i].ties)/2.0f;
+        population[i].genes.fitness = ((float)population[i].wins) + ((float)population[i].ties);
         //population[i].genes.fitness = ((float)population[i].wins);
         //population[i].genes.fitness = ((float)population[i].ties);
         //std::cout << "fitness " << population[i].genes.fitness << "\n";

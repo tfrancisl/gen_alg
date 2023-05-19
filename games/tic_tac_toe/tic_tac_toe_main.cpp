@@ -4,11 +4,11 @@
 
 
 int main(void) {
-    int gens = 100;
+    int gens = 10;
     int games = 100;
     int pop_size = 24;
 
-    srand(1337);
+    srand(13337);
 
     TicTacToe *ttt = new TicTacToe(pop_size, games);
 
