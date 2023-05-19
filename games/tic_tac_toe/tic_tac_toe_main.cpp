@@ -2,7 +2,6 @@
 #include "time.h"
 #include <iostream>
 
-
 int main(void) {
     int gens = 10;
     int games = 100;
