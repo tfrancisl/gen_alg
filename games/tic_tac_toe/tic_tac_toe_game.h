@@ -26,20 +26,28 @@ class TicTacToe {
 
 public:
     TicTacToe();
-    TicTacToe(int pop_size);
+    TicTacToe(int pop_size, int games);
 
-    int pop_size;
+    int pop_size, games;
     float crossover_rate, mutation_rate;
+    float avg_win_rate;
 
     vector<Individual> population;
 
-    void Generation(int games);
+    vector<Individual> first_population;
+    vector<Individual> second_population;
+
+    void Generation();
+    void GenerationPairs();
 
     // each individual plays out their current game
     void PlayGame();
+    void PlayGamePairs();
 
     void PrintPopStats();
-    
+
+    void EvaluateFitness(vector<Individual> &population);
+
     // give a fitness val to each individual based on win/loss/ties
     void EvaluateFitness();
 
@@ -62,6 +70,7 @@ public:
 
     // Make a move on your current game
     void MakeMove();
+    void MakeMovePairs(bitset<CHROMO_LENGTH> genes, bool first);
 
     // Random player makes a move on your current game
     void RandomPlayer();

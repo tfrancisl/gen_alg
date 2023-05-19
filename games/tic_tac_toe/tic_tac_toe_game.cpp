@@ -9,29 +9,33 @@ using std::string;
 
 TicTacToe::TicTacToe() {}
 
-TicTacToe::TicTacToe(int pop_size) {
+TicTacToe::TicTacToe(int pop_size, int games) {
     this->pop_size = pop_size;
-    this->population.assign(this->pop_size, Individual() );
+    this->games = games;
+    this->population.assign(this->pop_size, Individual());
+    this->first_population.assign(this->pop_size/2, Individual());
+    this->second_population.assign(this->pop_size/2, Individual());
 
 }
 
-void TicTacToe::Generation(int games) {
+void TicTacToe::Generation() {
 
     vector<Chromosome<GENE_LENGTH, GENE_COUNT>> tmp_pop;
-    int total_fitness = 0;
+    float total_fitness = 0;
 
-    for (int i=0; i<games; i++) {
+    for (int i=0; i<this->games; i++) {
         this->PlayGame();
     }
 
-    this->EvaluateFitness();
+    this->EvaluateFitness(this->population);
     //this->PrintPopStats();
 
     for (int i=0; i<this->pop_size; i++) {
         tmp_pop.push_back(Chromosome<GENE_LENGTH,GENE_COUNT>(this->population[i].genes));
         total_fitness += this->population[i].genes.fitness;
     }
-    std::cout << "Average fitness: " << (float)total_fitness/(float)this->pop_size << "\n";
+    std::cout << "Average fitness: " << total_fitness/(float)this->pop_size << std::endl;
+    std::cout << "Average winrate: " << this->avg_win_rate << std::endl;
 
     this->population.clear();
 
@@ -61,7 +65,62 @@ void TicTacToe::Generation(int games) {
 
 }
 
+void TicTacToe::GenerationPairs() {
 
+    vector<Chromosome<GENE_LENGTH, GENE_COUNT>> tmp_pop;
+    float total_fitness = 0.f;
+    int total_wins = 0;
+
+    for (int i=0; i<this->games; i++) {
+        this->PlayGamePairs();
+        std::rotate(this->second_population.begin(), this->second_population.begin()+1, this->second_population.end());
+    }
+
+    this->EvaluateFitness(this->first_population);
+    this->EvaluateFitness(this->second_population);
+    //this->PrintPopStats();
+
+    for (int i=0; i<this->pop_size/2; i++) {
+        tmp_pop.push_back(Chromosome<GENE_LENGTH,GENE_COUNT>(this->first_population[i].genes));
+        tmp_pop.push_back(Chromosome<GENE_LENGTH,GENE_COUNT>(this->second_population[i].genes));
+        total_fitness += this->first_population[i].genes.fitness;
+        total_fitness += this->second_population[i].genes.fitness;
+        total_wins += this->first_population[i].wins;
+        total_wins += this->second_population[i].wins;
+    }
+    this->avg_win_rate = (float)total_wins/(float)(this->games*this->pop_size);
+
+    std::cout << "Average fitness: " << total_fitness/(float)this->pop_size << std::endl;
+    std::cout << "Average winrate: " << this->avg_win_rate << std::endl;
+
+    this->first_population.clear();
+    this->second_population.clear();
+
+    for (int i=0; i<(this->pop_size)/2; i++) {
+        bitset<CHROMO_LENGTH> genes1,genes2;
+	    Chromosome<GENE_LENGTH,GENE_COUNT> new_chrm1,new_chrm2;
+
+        //Select two
+        genes1 = Roulette<GENE_LENGTH, GENE_COUNT>(total_fitness, tmp_pop);
+        genes2 = Roulette<GENE_LENGTH, GENE_COUNT>(total_fitness, tmp_pop);
+
+        //crossover
+        Crossover<GENE_LENGTH, GENE_COUNT>(genes1, genes2, this->crossover_rate);
+        
+        //mutate
+        Mutate<GENE_LENGTH, GENE_COUNT>(genes1, this->mutation_rate);
+        Mutate<GENE_LENGTH, GENE_COUNT>(genes2, this->mutation_rate);
+
+        new_chrm1 = Chromosome<GENE_LENGTH,GENE_COUNT>(genes1, 0.f, CHROMO_LENGTH); 
+        new_chrm2 = Chromosome<GENE_LENGTH,GENE_COUNT>(genes2, 0.f, CHROMO_LENGTH); 
+
+        //set up the new individuals
+        this->first_population.push_back(Individual(new_chrm1));
+        this->second_population.push_back(Individual(new_chrm2));
+
+    }
+
+}
 
 void TicTacToe::PlayGame()
 {
@@ -78,17 +137,55 @@ void TicTacToe::PlayGame()
                 this->population[i].RandomPlayer();
                 res = this->population[i].EvaluateBoard();
             }
+        } else {
+            while (abs(res) > 1) {
+                this->population[i].RandomPlayer();
+                res = this->population[i].EvaluateBoard();
+                if (abs(res) <= 1) break;
 
-            if (res == 0) {
-                this->population[i].ties++;
-            } else if (res == 1) {
-                this->population[i].wins++;
-            } else {
-                this->population[i].losses++;
+                this->population[i].MakeMove();
+                res = this->population[i].EvaluateBoard();
             }
         }
 
+        if (res == 0) {
+            this->population[i].ties++;
+        } else if (res == 1) {
+            this->population[i].wins++;
+        } else {
+            this->population[i].losses++;
+        }
         this->population[i].ClearBoard();
+
+    }
+}
+
+void TicTacToe::PlayGamePairs()
+{
+
+    for (int i=0; i<this->pop_size/2; i++) {
+        int res = 1000;
+
+        while (abs(res) > 1) {
+            this->first_population[i].MakeMovePairs(this->first_population[i].genes.bits, true);
+            res = this->first_population[i].EvaluateBoard();
+            if (abs(res) <= 1) break;
+
+            this->first_population[i].MakeMovePairs(this->second_population[i].genes.bits, false);
+            res = this->first_population[i].EvaluateBoard();        
+        }
+
+        if (res == 0) {
+            this->first_population[i].ties++;
+            this->second_population[i].ties++;
+        } else if (res == 1) {
+            this->first_population[i].wins++;
+            this->second_population[i].losses++;
+        } else {
+            this->first_population[i].losses++;
+            this->second_population[i].wins++;
+        }
+        this->first_population[i].ClearBoard();
 
     }
 }
@@ -104,13 +201,18 @@ void TicTacToe::PrintPopStats() {
     }
 }
 
-void TicTacToe::EvaluateFitness() {
+void TicTacToe::EvaluateFitness(vector<Individual> &population) {
+    //int total_wins = 0;
 
-    for (int i=0; i<this->pop_size; i++) {
-        //for some reason I'm making fitness = 1/4 of wins, we'll see how this works
-        this->population[i].genes.fitness = ((float)this->population[i].wins)/4.0f;
+    for (int i=0; i<population.size(); i++) {
+        population[i].genes.fitness = ((float)population[i].wins) + ((float)population[i].ties)/2.0f;
+        //population[i].genes.fitness = ((float)population[i].wins);
+        //population[i].genes.fitness = ((float)population[i].ties);
+        //std::cout << "fitness " << population[i].genes.fitness << "\n";
+        //total_wins += population[i].wins;
     }
 
+    //this->avg_win_rate = (float)total_wins/(float)(this->games*this->pop_size);
 }
 
 void TicTacToe::SetGeneticParams(float crossover_rate, float mutation_rate) {
@@ -146,7 +248,6 @@ Individual::Individual(Chromosome<GENE_LENGTH, GENE_COUNT> genes) {
     this->current_game = {0,0,0,0,0,0,0,0,0};
 }
 
-// after each move made, will need to evaluate the board
 void Individual::MakeMove() {
     bitset<18> current_state;
     bitset<GENE_LENGTH> action;
@@ -187,8 +288,53 @@ void Individual::MakeMove() {
             }
         } while (!move_taken);
     }
+}
 
+void Individual::MakeMovePairs(bitset<CHROMO_LENGTH> genes, bool first) {
+    bitset<18> current_state;
+    bitset<GENE_LENGTH> action;
 
+    for (int i=0; i<9; i++) {
+        int sq = this->current_game[i];
+        if( sq == 0) {
+            current_state[2*i+0] = 0;
+            current_state[2*i+1] = 0;
+        } else if ( sq == -1 ) {
+            current_state[2*i+0] = 0;
+            current_state[2*i+1] = 1;
+        } else if ( sq == 1 ) {
+            current_state[2*i+0] = 1;
+            current_state[2*i+1] = 0;
+        }
+    }
+
+    // get the action to take out of the genes using the current board state
+    for (int i=0; i<GENE_LENGTH; i++) {
+        action[i] = genes[GENE_LENGTH*(current_state.to_ulong()) + i];
+    }
+
+    int grid = action.to_ulong() % 9;   //mod it with 9 in case of overflow?
+
+    if (this->current_game[grid] == 0) {
+        if (first) {
+            this->current_game[grid] = 1;
+        } else {
+            this->current_game[grid] = -1;
+        }
+    } else {
+        bool move_taken = false;
+        do {
+        int r_sq = RANDOM_NUM_RANGE(9);
+            if (this->current_game[r_sq] == 0) {
+                if (first) {
+                    this->current_game[r_sq] = 1;
+                } else {
+                    this->current_game[r_sq] = -1;
+                }
+                move_taken = true;
+            }
+        } while (!move_taken);
+    }
 }
 
 void Individual::RandomPlayer() {

@@ -4,19 +4,18 @@
 
 
 int main(void) {
-    int gens = 1000;
-    int games = 250;
+    int gens = 100;
+    int games = 100;
+    int pop_size = 24;
 
-    srand((int)time(NULL));
+    srand(1337);
 
-    TicTacToe *ttt = new TicTacToe(10);
+    TicTacToe *ttt = new TicTacToe(pop_size, games);
 
-    ttt->SetGeneticParams(0.7,0.001);
+    ttt->SetGeneticParams(0.75,0.001);
 
     for (int i=0; i<gens; i++) {
-        ttt->Generation(games);
-
-        //ttt->PrintPopStats();
+        ttt->GenerationPairs();
     }
 
     return 0;
