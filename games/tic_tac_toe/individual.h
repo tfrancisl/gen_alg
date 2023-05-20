@@ -7,6 +7,7 @@ class Individual {
 
 public:
     Individual();
+    Individual(const Individual &i);
     Individual(Chromosome<GENE_LENGTH, GENE_COUNT> genes);
 
     //bitset<CHROMO_LENGTH> genes;

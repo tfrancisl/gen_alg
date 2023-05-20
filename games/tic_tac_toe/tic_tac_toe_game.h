@@ -25,7 +25,7 @@ class TicTacToe {
 
 public:
     TicTacToe();
-    TicTacToe(int pop_size, int games);
+    TicTacToe(int pop_size, int games, bool pairs);
 
     int pop_size, games;
     float crossover_rate, mutation_rate;
@@ -35,6 +35,9 @@ public:
 
     vector<Individual> first_population;
     vector<Individual> second_population;
+
+    void CondensePairs();
+    void MakePairs();
 
     void Generation();
     void GenerationPairs();

@@ -19,6 +19,16 @@ Individual::Individual() {
 
 }
 
+Individual::Individual(const Individual &i) {
+    this->genes = i.genes;
+
+    this->wins = 0;
+    this->losses = 0;
+    this->ties = 0;
+    this->first = true;
+    this->current_game = {0,0,0,0,0,0,0,0,0};
+}
+
 Individual::Individual(Chromosome<GENE_LENGTH, GENE_COUNT> genes) {
     this->genes = genes;
 
@@ -49,7 +59,7 @@ void Individual::MakeMove() {
 
     // get the action to take out of the genes using the current board state
     for (int i=0; i<GENE_LENGTH; i++) {
-        action[i] = this->genes.bits[GENE_LENGTH*(current_state.to_ulong()) + i];
+        action[i] = this->genes.bits[GENE_LENGTH*(current_state.to_ullong()) + i];
     }
 
     int grid = action.to_ulong() % 9;   //mod it with 9 in case of overflow?

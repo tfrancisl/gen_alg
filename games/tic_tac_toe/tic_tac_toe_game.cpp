@@ -10,12 +10,46 @@ using std::string;
 
 TicTacToe::TicTacToe() {}
 
-TicTacToe::TicTacToe(int pop_size, int games) {
+TicTacToe::TicTacToe(int pop_size, int games, bool pairs) {
     this->pop_size = pop_size;
     this->games = games;
-    this->population.assign(this->pop_size, Individual());
-    this->first_population.assign(this->pop_size/2, Individual());
-    this->second_population.assign(this->pop_size/2, Individual());
+
+    if (pairs) {
+        this->first_population.assign(this->pop_size/2, Individual());
+        this->second_population.assign(this->pop_size/2, Individual());
+    } else {
+        this->population.assign(this->pop_size, Individual());
+    }
+
+}
+
+void TicTacToe::CondensePairs() {
+
+    this->population = this->first_population;
+    
+    for (vector<Individual>::iterator i = this->second_population.begin(); i != this->second_population.end(); ++i) {
+        this->population.push_back(*i);
+    }
+    this->first_population.clear();
+    this->second_population.clear();
+}
+
+void TicTacToe::MakePairs() {
+    //this->first_population.clear();
+    //this->second_population.clear();
+
+    //std::cout << "pop size " << this->population.size() << std::endl; 
+
+    for (int i = 0; i<this->pop_size/2; i++) {
+        this->first_population.push_back( this->population[i] );
+        //this->population.pop_back();
+        this->second_population.push_back( this->population[i+this->pop_size] );
+        //std::cout << "pop size " << this->population.size() << std::endl;
+    }
+
+    //this->second_population = this->population;
+    //std::cout << "first pop size " << this->first_population.size() << std::endl;
+    //std::cout << "second pop size " << this->second_population.size() << std::endl;
 
 }
 
@@ -23,6 +57,7 @@ void TicTacToe::Generation() {
 
     vector<Chromosome<GENE_LENGTH, GENE_COUNT>> tmp_pop;
     float total_fitness = 0;
+    int total_wins = 0;
 
     for (int i=0; i<this->games; i++) {
         this->PlayGame();
@@ -34,7 +69,9 @@ void TicTacToe::Generation() {
     for (int i=0; i<this->pop_size; i++) {
         tmp_pop.push_back(Chromosome<GENE_LENGTH,GENE_COUNT>(this->population[i].genes));
         total_fitness += this->population[i].genes.fitness;
+        total_wins += this->population[i].wins;
     }
+    this->avg_win_rate = (float)total_wins/(float)(this->games*this->pop_size);
     std::cout << "Average fitness: " << total_fitness/(float)this->pop_size << std::endl;
     std::cout << "Average winrate: " << this->avg_win_rate << std::endl;
 
@@ -73,10 +110,12 @@ void TicTacToe::GenerationPairs() {
     int total_wins = 0;
 
     for (int i=0; i<this->games; i++) {
+        
         this->PlayGamePairs();
         std::swap(this->first_population, this->second_population);
         if (i%2==0) std::rotate(this->second_population.begin(), this->second_population.begin()+2, this->second_population.end());
     }
+
 
     this->EvaluateFitness(this->first_population);
     this->EvaluateFitness(this->second_population);
@@ -188,6 +227,7 @@ void TicTacToe::PlayGamePairs()
         }
         this->first_population[i].ClearBoard();
 
+
     }
 }
 
@@ -206,7 +246,7 @@ void TicTacToe::EvaluateFitness(vector<Individual> &population) {
     //int total_wins = 0;
 
     for (int i=0; i<population.size(); i++) {
-        population[i].genes.fitness = ((float)population[i].wins) + ((float)population[i].ties);
+        population[i].genes.fitness = ((float)population[i].wins) + ((float)population[i].ties)/4.0f;
         //population[i].genes.fitness = ((float)population[i].wins);
         //population[i].genes.fitness = ((float)population[i].ties);
         //std::cout << "fitness " << population[i].genes.fitness << "\n";
