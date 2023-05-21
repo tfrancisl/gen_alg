@@ -23,7 +23,7 @@ public:
     float fitness;  
 
     Chromosome();
-    Chromosome(const Chromosome<gene_len, gene_count> &c);
+    //Chromosome(const Chromosome<gene_len, gene_count> &c);
     Chromosome(bitset<gene_len*gene_count> b, float f, int l);
 
     void PrintChromosome();

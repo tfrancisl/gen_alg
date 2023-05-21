@@ -10,12 +10,12 @@ Chromosome<gene_len, gene_count>::Chromosome(){
     this->length = gene_len*gene_count;
 }
 
-template<int gene_len, int gene_count>
+/*template<int gene_len, int gene_count>
 Chromosome<gene_len, gene_count>::Chromosome(const Chromosome<gene_len, gene_count> &c) {
     this->bits = c.bits;
     this->fitness = c.fitness;
     this->length = c.length;
-}
+}*/
 
 template<int gene_len, int gene_count>
 Chromosome<gene_len, gene_count>::Chromosome(bitset<gene_len*gene_count> b, float f, int l) {

@@ -47,6 +47,8 @@ public:
     void PlayGamePairs();
 
     void PrintPopStats();
+    
+    void FreeVectors();
 
     // give a fitness val to each individual based on win/loss/ties
     void EvaluateFitness(vector<Individual> &population);
