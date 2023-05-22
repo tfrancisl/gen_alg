@@ -29,7 +29,9 @@ public:
 
     int pop_size, games;
     float crossover_rate, mutation_rate;
-    float avg_win_rate;
+    float avg_win_rate, avg_tie_rate, total_fitness;
+
+    vector<float> win_rates, tie_rates, fitness_avg;
 
     vector<Individual> population;
 
@@ -41,6 +43,14 @@ public:
 
     void Generation();
     void GenerationPairs();
+
+    void CalculateStats();
+    void CalculateStatsPairs();
+
+    void PrintCSV(string fn);
+
+    void GeneticRoutine();
+    void GeneticRoutinePairs();
 
     // each individual plays out their current game
     void PlayGame();
