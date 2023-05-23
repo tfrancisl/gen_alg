@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import sys
 import os
 
-avg_n = 100
+avg_n = 4
 
 if len(sys.argv) < 3:
     print("error provide csv name and output basename")
@@ -18,7 +18,8 @@ if not os.path.isdir("test_outputs"):
     os.mkdir("test_outputs")
 
 base_name = os.path.join("test_outputs", base_name)
-os.mkdir(base_name)
+if not os.path.isdir(base_name):
+    os.mkdir(base_name)
 
 def moving_average(x, w):
     return np.convolve(x, np.ones(w), 'valid') / w

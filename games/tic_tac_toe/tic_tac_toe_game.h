@@ -27,6 +27,8 @@ public:
     TicTacToe();
     TicTacToe(int pop_size, int games, bool pairs);
 
+    void SeedPopulations(int n, string fn, bool pairs);
+
     int pop_size, games;
     float crossover_rate, mutation_rate;
     float avg_win_rate, avg_tie_rate, total_fitness;
@@ -37,6 +39,8 @@ public:
 
     vector<Individual> first_population;
     vector<Individual> second_population;
+
+    Chromosome<GENE_LENGTH, GENE_COUNT> fittest;
 
     void CondensePairs();
     void MakePairs();

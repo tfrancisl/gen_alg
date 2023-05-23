@@ -10,13 +10,6 @@ Chromosome<gene_len, gene_count>::Chromosome(){
     this->length = gene_len*gene_count;
 }
 
-/*template<int gene_len, int gene_count>
-Chromosome<gene_len, gene_count>::Chromosome(const Chromosome<gene_len, gene_count> &c) {
-    this->bits = c.bits;
-    this->fitness = c.fitness;
-    this->length = c.length;
-}*/
-
 template<int gene_len, int gene_count>
 Chromosome<gene_len, gene_count>::Chromosome(bitset<gene_len*gene_count> b, float f, int l) {
     this->bits = b;
@@ -29,5 +22,22 @@ void Chromosome<gene_len, gene_count>::PrintChromosome() {
     std::cout << this->bits.to_string() << std::endl;
 }
 
+template <int gene_len, int gene_count>
+void Chromosome<gene_len, gene_count>::ChromosomeToFile(string fn) {
+    ofstream f;
+
+	f.open(fn, std::ios::out);
+
+    f << this->bits.to_string() << std::endl;
+    
+    f.close();
+}
+
+template <int gene_len, int gene_count>
+void Chromosome<gene_len, gene_count>::ChromosomeFromFile(string str) {
+
+    this->bits = bitset<gene_count*gene_len>(str);
+    
+}
 
 #endif

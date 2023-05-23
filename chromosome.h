@@ -6,13 +6,14 @@
 #include <math.h>
 #include <bitset>
 #include <iostream>
+#include <fstream>
 #include <vector>
-#include <bitset>
 
 using std::string;
 using std::vector;
 using std::bitset;
 using std::array;
+using std::ofstream;
 
 template<int gene_len, int gene_count>
 class Chromosome {
@@ -27,7 +28,9 @@ public:
     Chromosome(bitset<gene_len*gene_count> b, float f, int l);
 
     void PrintChromosome();
+    void ChromosomeToFile(string fn);
 
+    void ChromosomeFromFile(string fn);
 };
 
 #include "chromosome.cpp"

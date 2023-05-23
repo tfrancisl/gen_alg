@@ -25,6 +25,21 @@ TicTacToe::TicTacToe(int pop_size, int games, bool pairs) {
 
 }
 
+// Replace the genomes of the first n in the populations with the bits in str
+void TicTacToe::SeedPopulations(int n, string str, bool pairs) {
+
+    for (int i = 0; i<this->pop_size/2; i++) {
+        if( !pairs ) {
+            this->population[2*i].genes.ChromosomeFromFile(str);
+            this->population[2*i+1].genes.ChromosomeFromFile(str);
+        } else {
+            this->first_population[i].genes.ChromosomeFromFile(str);
+            this->second_population[i].genes.ChromosomeFromFile(str);
+        }
+    }
+
+}
+
 void TicTacToe::FreeVectors() {
     this->population.clear();
     this->first_population.clear();
@@ -68,6 +83,9 @@ void TicTacToe::Generation() {
         total_fitness += this->population[i].genes.fitness;
         total_wins += this->population[i].wins;
         total_ties += this->population[i].ties;
+        this->population[i].wins = 0;
+        this->population[i].ties = 0;
+        this->population[i].losses = 0;
     }
     this->avg_win_rate = (float)total_wins/(float)(this->games*this->pop_size);
     this->total_fitness = total_fitness;
@@ -82,6 +100,8 @@ void TicTacToe::Generation() {
 void TicTacToe::GenerationPairs() {
 
     float total_fitness = 0.f;
+    float max_fitness = 0.f;
+    int max_fitness_idx;
 
     for (int i=0; i<this->games; i++) {
         this->PlayGamePairs();
@@ -93,8 +113,25 @@ void TicTacToe::GenerationPairs() {
     this->EvaluateFitness(this->second_population);
 
     for (int i=0; i<this->pop_size/2; i++) {
+        if (this->first_population[i].genes.fitness > max_fitness)  {
+            max_fitness = this->first_population[i].genes.fitness;
+            max_fitness_idx = i;
+        }
+
         total_fitness += this->first_population[i].genes.fitness;
+
+        if (this->second_population[i].genes.fitness > max_fitness) {
+            max_fitness = this->second_population[i].genes.fitness;
+            max_fitness_idx = 2*i;
+        }
+
         total_fitness += this->second_population[i].genes.fitness;
+    }
+
+    if (max_fitness_idx > this->pop_size/2) {
+        fittest = this->second_population[max_fitness_idx/2].genes;
+    } else {
+        fittest = this->first_population[max_fitness_idx].genes;
     }
 
     this->total_fitness = total_fitness;
